@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    container_name: node_server
+    build: .
+    ports:
+      - "5001:5001"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - NO_OF_WORKER_PROCESSES=2
+    command: npm start
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
