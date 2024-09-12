@@ -16,5 +16,7 @@ if (cluster.isMaster) {
   });
 } else {
   // Worker processes
-  require('./server.js')
+  PORT=process.env.PORT
+  const { server } = require('./server.js')
+  server()
 }

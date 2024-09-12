@@ -7,7 +7,7 @@ module.exports = (err, req, res, next) => {
   const logFilePath = path.join(__dirname, '../logs/error_logs.txt');
   const errorMessage = `${getTimeNow()} - Error: ${err.message} at ${process.pid}\n`;
 
-  console.log(errorMessage)
+  // console.log(errorMessage)
   
   // Log the error to a file
   fs.appendFileSync(logFilePath, errorMessage, 'utf8');

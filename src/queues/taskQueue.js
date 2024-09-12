@@ -22,7 +22,7 @@ taskQueue.process(async (job, done) => {
     done();
   } catch (err) {
     const errorLogEntry = `Queue error for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
-    console.log(errorLogEntry)
+    // console.log(errorLogEntry)
     fs.appendFileSync(path.join(__dirname, '../logs/error_logs.txt'), errorLogEntry, 'utf8');
     done(new Error('Task processing failed'));
   }
@@ -35,11 +35,11 @@ taskQueue.addTask = (userId) => {
 const logTask = async (userId) => {
   try {
     const logEntry = `UserId = ${userId} task completed at-${getTimeNow()} by process-${process.pid}\n`;
-    console.log(logEntry)
+    // console.log(logEntry)
     fs.appendFileSync(path.join(__dirname, '../logs/task_logs.txt'), logEntry, 'utf8');
   } catch (err) {
     const errorLogEntry = `Error processing task for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
-    console.log(errorLogEntry)
+    // console.log(errorLogEntry)
     fs.appendFileSync(path.join(__dirname, '../logs/error_logs.txt'), errorLogEntry, 'utf8');
   }
 };

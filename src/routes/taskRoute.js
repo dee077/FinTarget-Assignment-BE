@@ -5,7 +5,6 @@ const rateLimitMiddleware = require('../middlewares/rateLimiterMiddleware');
 
 const router = express.Router();
 
-// POST route for processing tasks
 router.post('/task', rateLimitMiddleware, taskController);
 
 module.exports = router;
