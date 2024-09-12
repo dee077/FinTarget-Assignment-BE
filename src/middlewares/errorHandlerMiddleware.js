@@ -1,10 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const { getTimeNow } = require('../utils/functions');
 
 // Error-handling middleware
 module.exports = (err, req, res, next) => {
-  const logFilePath = path.join(__dirname, '../error_logs.txt');
-  const errorMessage = `${new Date().toISOString()} - Error: ${err.message}\n`;
+  const logFilePath = path.join(__dirname, '../logs/error_logs.txt');
+  const errorMessage = `${getTimeNow()} - Error: ${err.message} at ${process.pid}\n`;
+
+  console.log(errorMessage)
   
   // Log the error to a file
   fs.appendFileSync(logFilePath, errorMessage, 'utf8');

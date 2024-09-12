@@ -1,9 +1,9 @@
-const taskService = require('../services/taskService');
+const { taskQueue } = require('../queues/taskQueue');
 
-exports.processTask = async (req, res) => {
-  const { user_id } = req.body;
+module.exports = async (req, res) => {
+  const { userId } = req.body;
   try {
-    await taskService.addTask(user_id);
+    await taskQueue.addTask(userId);
     res.status(200).send('Task received and will be processed');
   } catch (err) {
     res.status(500).send('Error processing task');

@@ -1,12 +1,13 @@
 const Queue = require('bull');
-const { processTask } = require('./taskProcessor'); // Use the new module
+const fs = require('fs');
+const path = require('path');
+const { getTimeNow } = require('../utils/functions');
 require('dotenv').config();
 
 const taskQueue = new Queue('taskQueue', {
   redis: {
     host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASSWORD, // Optional
+    port: process.env.REDIS_PORT
   },
   settings: {
     retries: 3, // Retry tasks 3 times before failing
@@ -17,13 +18,30 @@ const taskQueue = new Queue('taskQueue', {
 taskQueue.process(async (job, done) => {
   const { userId } = job.data;
   try {
-    await processTask(userId);
+    await logTask(userId);
     done();
   } catch (err) {
-    const errorLogEntry = `Queue error for user ${userId} at ${Date.now()}: ${err.message}\n`;
-    fs.appendFileSync(path.join(__dirname, '../error_logs.txt'), errorLogEntry, 'utf8');
+    const errorLogEntry = `Queue error for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
+    console.log(errorLogEntry)
+    fs.appendFileSync(path.join(__dirname, '../logs/error_logs.txt'), errorLogEntry, 'utf8');
     done(new Error('Task processing failed'));
   }
 });
 
-module.exports = taskQueue;
+taskQueue.addTask = (userId) => {
+  return taskQueue.add({ userId });
+};
+
+const logTask = async (userId) => {
+  try {
+    const logEntry = `UserId = ${userId} task completed at-${getTimeNow()} by process-${process.pid}\n`;
+    console.log(logEntry)
+    fs.appendFileSync(path.join(__dirname, '../logs/task_logs.txt'), logEntry, 'utf8');
+  } catch (err) {
+    const errorLogEntry = `Error processing task for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
+    console.log(errorLogEntry)
+    fs.appendFileSync(path.join(__dirname, '../logs/error_logs.txt'), errorLogEntry, 'utf8');
+  }
+};
+
+module.exports = { taskQueue };
