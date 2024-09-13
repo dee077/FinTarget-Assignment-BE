@@ -1,6 +1,6 @@
 const request = require("supertest");
 const { app } = require("../server");
-const { cleanRedisKeys } = require("../utils/functions");
+const { cleanRedisKeys } = require("../configs/redisConfig");
 
 describe("Rate Limiting API Tests", () => {
 
@@ -20,6 +20,7 @@ describe("Rate Limiting API Tests", () => {
     // Clean up Redis keys after each test
     await cleanRedisKeys("rateLimiterPerRequest");
     await cleanRedisKeys("rateLimiterPerMinute");
+    await cleanRedisKeys("")
   });
 
   // Success Case: 1 Request per second

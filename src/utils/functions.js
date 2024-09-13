@@ -6,11 +6,4 @@ const getTimeNow = () =>{
     return formattedDate
 }
 
- const cleanRedisKeys = async (prefix) => {
-    const keys = await redisClient.keys(`${prefix}:*`);
-    if (keys.length > 0) {
-      await redisClient.del(keys);
-    }
-  }
-
-module.exports = { getTimeNow, cleanRedisKeys }
+module.exports = { getTimeNow }

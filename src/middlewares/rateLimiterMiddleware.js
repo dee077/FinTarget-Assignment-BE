@@ -1,13 +1,17 @@
 const { rateLimiterPerRequest, rateLimiterPerMinute } = require('../configs/redisConfig');
+const { addTask } = require('../queues/taskQueue');
 const { errorMessage } = require('../utils/messages');
 
 module.exports = async (req, res, next) => {
-  const userId = req.body.userId;
+  const { userId } = req.body;
   try {
-    await rateLimiterPerRequest.consume(userId,1); // Consume 1 point per request
-    await rateLimiterPerMinute.consume(userId,1)
+    await rateLimiterPerRequest.consume(userId);
+    await rateLimiterPerMinute.consume(userId);
     next();
   } catch (rejRes) {
+    // const delay = rejRes.msBeforeNext;
+    // console.log(delay)
+    await addTask(userId, 5000);
     res.status(429).send(errorMessage);
   }
 };

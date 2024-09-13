@@ -1,7 +1,6 @@
 const express = require("express");
 const taskRoutes = require("./routes/taskRoute");
 const errorHandler = require("./middlewares/errorHandlerMiddleware");
-const rateLimiterMiddleware = require("./middlewares/rateLimiterMiddleware");
 
 const app = express();
 
@@ -14,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", taskRoutes);
 
-app.use(errorHandler, rateLimiterMiddleware);
+app.use(errorHandler);
 
 const server = () => {
   app.listen(PORT, () => {
