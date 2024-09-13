@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
   } catch (rejRes) {
     // const delay = rejRes.msBeforeNext;
     // console.log(delay)
-    await addTask(userId, 5000);
+    await addTask(userId, 1000);
     res.status(429).send(errorMessage);
   }
 };
