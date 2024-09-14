@@ -5,7 +5,7 @@ This project demonstrates a rate-limited task processing API built with Node.js,
 - **Per Minute**: Allows up to 20 requests per minute per user.
 
 
-## Key Features:
+## Implementation:
 
 - **Rate Limiting**: Protects the API from being overwhelmed by limiting requests at two levels: per second and per minute.
 - **Task Queue**: Processes incoming tasks asynchronously using Redis, decoupling task execution from API requests.

@@ -17,9 +17,9 @@ const taskQueue = new Queue('taskQueue', redisOptions);
 
 // Define the task processing logic
 const worker = new Worker('taskQueue', async (job) => {
-  const { userId } = job.data;
+  const { userId, delay } = job.data;
   try {
-    await logTask(userId);
+    await logTask(userId, delay);
   } catch (err) {
     const errorLogEntry = `Queue error for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
     fs.appendFileSync(path.join(__dirname, '../logs/error_logs.txt'), errorLogEntry, 'utf8');
@@ -29,13 +29,13 @@ const worker = new Worker('taskQueue', async (job) => {
 
 // Add a task to the queue
 const addTask = async (userId, delay=0) => {
-  await taskQueue.add('task', { userId }, { delay: delay });
+  await taskQueue.add('task', { userId, delay }, { delay: delay });
 };
 
 // Log the task completion
-const logTask = async (userId) => {
+const logTask = async (userId, delay) => {
   try {
-    const logEntry = `UserId = ${userId} task completed at-${getTimeNow()} by process-${process.pid}\n`;
+    const logEntry = `UserId = ${userId} task completed at-${getTimeNow()} by process-${process.pid} with delay-${delay}\n`;
     fs.appendFileSync(path.join(__dirname, '../logs/task_logs.txt'), logEntry, 'utf8');
   } catch (err) {
     const errorLogEntry = `Error processing task for user ${userId} at ${getTimeNow()} at ${process.pid}: ${err.message}\n`;
