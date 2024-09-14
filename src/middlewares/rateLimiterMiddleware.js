@@ -1,4 +1,4 @@
-const { rateLimiterPerRequest, rateLimiterPerMinute, getUserTime } = require('../configs/redisConfig');
+const { rateLimiterPerRequest, rateLimiterPerMinute, getUserTime, addUserTime } = require('../configs/redisConfig');
 const { addTask } = require('../queues/taskQueue');
 const { errorMessage } = require('../utils/messages');
 
@@ -15,6 +15,7 @@ module.exports = async (req, res, next) => {
     const delay = endTime - Date.now()
     console.log(delay)
     await addTask(userId, delay);
+    await addUserTime(userId, Date.now()+delay+5000);
     res.status(429).send(errorMessage);
   }
 };

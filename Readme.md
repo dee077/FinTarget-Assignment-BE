@@ -7,6 +7,25 @@ This project demonstrates a rate-limited task processing API built with Node.js,
 
 ## Implementation:
 
+1. **Node.js Application**:  
+   Created a basic Node.js app with an Express API endpoint `/api/tasks` to handle task submissions.
+
+2. **BullMQ for Queue**:  
+   Used **BullMQ** to manage task queues and handle delayed task execution with Redis for storage.
+
+3. **Rate Limiting**:  
+   Implemented API rate limiting using Redis to control user requests and apply delays when limits are exceeded.
+
+4. **Delay Calculation**:  
+   Calculated delays dynamically using redis keys and used BullMQ to queue tasks for delayed execution based on rate limits.
+
+5. **Docker Setup**:  
+   Deployed **Redis** and **Redis Commander** using Docker for seamless environment setup and Redis management.
+
+6. **Test Cases**:  
+   Wrote tests to validate task submission, delay handling, and rate limit functionality.
+
+
 - **Rate Limiting**: Protects the API from being overwhelmed by limiting requests at two levels: per second and per minute.
 - **Task Queue**: Processes incoming tasks asynchronously using Redis, decoupling task execution from API requests.
 - **Clustering**: Utilizes Node.js `cluster` to scale the application across multiple CPU cores, enhancing the performance of the application under heavy loads.
